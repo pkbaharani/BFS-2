@@ -1,0 +1,68 @@
+/*
+TimeComplexity: O(n)
+Space: O(1)
+
+Leetcode: successful
+
+Approach:
+pop the queue and push children in the queue.
+if you find your elements as children of a root, return false.
+at every level we are iterating till the initial size of the queue at that level.
+if you find your elements in the queue return true;
+
+
+else return false
+
+*/
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isCousins(TreeNode root, int x, int y) {
+        
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        return getHelp(q,x,y);
+    }
+    
+    
+    boolean getHelp(Queue<TreeNode> q, int x, int y)
+    {
+        if(q.size()<1) return false;
+        TreeNode temp;
+        HashSet<Integer> hs = new HashSet<>();
+        int limiter=q.size();
+        for(int i=0;i<limiter;i++)
+        {
+            temp=q.poll();
+            
+            if(temp.right!=null&&temp.left!=null)
+               {
+                
+                   if((temp.right.val==x || temp.right.val==y )&&(temp.left.val==y||temp.left.val==x)) return false;
+               }
+               
+            if(temp.right!=null) 
+            {
+                hs.add(temp.right.val); 
+                q.add(temp.right);
+            }
+            
+            if(temp.left!=null) 
+            { 
+                hs.add(temp.left.val); 
+                q.add(temp.left);
+            }        
+        }
+    
+        if(hs.contains(x)&&hs.contains(y)) return true;
+        return getHelp(q,x,y);
+    }
+}
